@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>popup.html</title>
+	</head>
+	<body>
+		<h1>Hello</h1>	
+		<script type="text/javascript">
+chrome.extension.onRequest.addListener(
+	function (request, sender, sendResponse) {
+		console.log(sender.tab ? 
+					"from a content script: " + sender.tab.url :
+					"from the extension");
+		
+		if (request.greeting == "hello")
+			sendResponse({farewell: "goodbye"});
+		else 
+			sendResponse({});
+	});
+		</script>
+	</body>
+</html>

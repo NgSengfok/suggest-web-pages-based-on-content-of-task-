@@ -1,0 +1,23 @@
+{
+	"name"		: "Simple one-time requests",
+	"version"	: "0.0",
+
+	"description"	:	"The simple extension that one-time requests.",
+	"browser_action": {
+		"default_icon" : "icon.png",
+		"popup" : "popup.html"
+	},
+
+	"background_page" : "background.html",
+	"content_scripts" : [
+		{
+			"matches" : ["http://*/*", "https://*/*"],
+			"js" : ["content.js"]
+		}
+	],
+	"permissions" : [
+		"tabs",
+		"http://*/*",
+		"https://*/*"
+	]
+}
