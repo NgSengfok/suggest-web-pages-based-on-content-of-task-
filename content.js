@@ -1,25 +1,29 @@
 var __IS_DEBUG__ = true;
 
+var __DEBUG__ = {
+	output : true,
+	class : {
+		Page : {
+			output : true,
+			methods : {
+				page : true,
+				sendRequest : true
+			}
+		},
+		Data : {
+			output : true,
+			methods: { 
+				data : true,
+				getElementsByTagName : true,
+				getMetaObj : true,
+				getInfo : true
+			}	
+		}
+	}
+}
+
 if (__IS_DEBUG__)
 	console.log("Input success!");
-
-var d = new Data();
-var request = {
-	greeting: "hello", 
-	info	: d.getInfo() 
-};
-
-if (__IS_DEBUG__) 
-{
-	console.log('new Data: %o', d);
-	console.log('Send request with %o', request);
-}
-chrome.extension.sendRequest(request,
-	function (response) {
-		if (__IS_DEBUG__)
-			console.log('Receive response with %o', response);
-	}
-);
 
 function Data()
 {
@@ -78,3 +82,39 @@ function Data()
 	return new data();
 }
 
+function Page()
+{
+	var __DEBUG_METHOD_SENDREQUEST__ = true,
+		__DEBUG_PAGE_CONSTRUCT__ = true;
+
+	function page()
+	{	
+		this.data = new Data();
+
+		if (__IS_DEBUG__ && __DEBUG_PAGE_CONSTRUCT__) 
+			console.log('Page init new Data: %o', this.data);
+	}
+
+	page.prototype.sendRequest = function (req)
+	{
+		var request = req || {
+			greeting: "hello", 
+			info	: this.data.getInfo() 
+		};
+
+		if (__IS_DEBUG__ && __DEBUG_METHOD_SENDREQUEST__) 
+			console.log('Send request with %o', request);
+
+		chrome.extension.sendRequest(request,
+			function (response) {
+				if (__IS_DEBUG__ && __DEBUG_METHOD_SENDREQUEST__) 
+					console.log('Receive response with %o', response);
+			}
+		);
+	};
+
+	return new page();
+}
+
+var p = new Page();
+p.sendRequest();
