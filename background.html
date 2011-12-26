@@ -27,6 +27,16 @@ chrome.tabs.onCreated.addListener(function (tab){
 chrome.tabs.onUpdated.addListener(function (tab_id, change_info, tab) {
 	console.log('updated tab');
 	console.log('tab id: %o; chang info: %o; tab: %o', tab_id, change_info, tab);
+	if (change_info.status == 'complete')
+	{
+		var request = {operate: 'get-page-info'};
+
+		console.log('Send request(%o) to tab(%o)', request, tab.id);
+
+		chrome.tabs.sendRequest(tab.id, request, function (response) {
+			console.log('Receive response: %o', response);	
+		});
+	}
 });
 		</script>
 	</body>

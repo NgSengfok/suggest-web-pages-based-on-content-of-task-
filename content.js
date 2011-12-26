@@ -142,5 +142,10 @@ function Page()
 	return new page();
 }
 
+chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
+	console.log('Receive request(%o) from sender(%o)', request, sender);
+	var d = new Data();
+	sendResponse(d.getInfo());
+});
 // var p = new Page();
 // p.sendRequest();
