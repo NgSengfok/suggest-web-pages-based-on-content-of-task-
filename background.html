@@ -25,6 +25,7 @@ chrome.tabs.onCreated.addListener(function (tab){
 });
 
 chrome.tabs.onUpdated.addListener(function (tab_id, change_info, tab) {
+	
 	console.log('updated tab');
 	console.log('tab id: %o; chang info: %o; tab: %o', tab_id, change_info, tab);
 	if (change_info.status == 'complete')
@@ -41,3 +42,5 @@ chrome.tabs.onUpdated.addListener(function (tab_id, change_info, tab) {
 		</script>
 	</body>
 </html>
+
+<!-- End of file background.html -->

@@ -3,12 +3,32 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>popup.html</title>
+
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js" ></script>
 	</head>
 	<body>
-		<h1>Hello</h1>	
+		<h1>Hello</h1>
+		<div id="data"></div>	
 		<script type="text/javascript">
-			chrome.extension.sendRequest({greeting: "hello"}, function(response) {
-				console.log(response.farewell);
+			document.observe('dom:loaded', function () {
+				chrome.extension.sendRequest({greeting: "hello"}, function(response) {
+					console.log(response.farewell);
+				});
+
+				/*
+				new Ajax.Updater('data', 'http://m.weather.com.cn/data/101280101.html', {
+					method: 'get'
+					});
+					*/
+				console.log('Send request to get weather info');
+				new Ajax.Request('http://m.weather.com.cn/data/101280101.html', {
+					method: 'get',
+					onSuccess: function(response) {
+						console.log('Receive response: %o', response);
+						// console.log('response.responseText: %o', response.responseText);
+						console.log('JSON: %o', response.responseText.evalJSON());
+					}
+				});
 			});
 		</script>
 	</body>

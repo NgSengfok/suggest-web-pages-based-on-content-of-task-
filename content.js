@@ -144,8 +144,12 @@ function Page()
 
 chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
 	console.log('Receive request(%o) from sender(%o)', request, sender);
-	var d = new Data();
-	sendResponse(d.getInfo());
+
+	if (request.operate == 'get-page-info')
+	{
+		var d = new Data();
+		sendResponse(d.getInfo());
+	}
 });
-// var p = new Page();
-// p.sendRequest();
+
+/* End of file console.js */
