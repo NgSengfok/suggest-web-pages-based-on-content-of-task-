@@ -19,6 +19,15 @@ chrome.extension.onRequest.addListener(
 			sendResponse({});
 	}
 );
+
+chrome.tabs.onCreated.addListener(function (tab){
+	console.log('create tab: %o', tab);
+});
+
+chrome.tabs.onUpdated.addListener(function (tab_id, change_info, tab) {
+	console.log('updated tab');
+	console.log('tab id: %o; chang info: %o; tab: %o', tab_id, change_info, tab);
+});
 		</script>
 	</body>
 </html>

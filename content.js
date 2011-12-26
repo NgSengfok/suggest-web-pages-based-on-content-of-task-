@@ -1,20 +1,18 @@
-var __IS_DEBUG__ = true;
-
 var __DEBUG__ = {
-	output : true,
-	class : {
-		Page : {
+	output : false,
+	classes : {
+		page : {
 			output : true,
 			methods : {
 				page : true,
 				sendRequest : true
 			}
 		},
-		Data : {
+		data : {
 			output : true,
 			methods: { 
 				data : true,
-				getElementsByTagName : true,
+				getMetaTagWithName : true,
 				getMetaObj : true,
 				getInfo : true
 			}	
@@ -22,14 +20,40 @@ var __DEBUG__ = {
 	}
 }
 
-if (__IS_DEBUG__)
+/**
+ * @param function callback
+ */
+function ConsoleLog(obj, callback)
+{
+	if (! __DEBUG__.output) return;
+
+	var debug_classes = __DEBUG__.classes;
+	var debug_class = debug_classes[obj.class]; 	
+	/*
+	console.log('debug_classes: %o', debug_classes);
+	console.log('debug_class: %o', debug_class);
+	*/
+	if (! debug_class) return;
+	if (! debug_class.output) return;
+
+	var debug_methods = debug_class.methods;
+	/*
+	console.log('debug_methods: %o', debug_methods);
+	*/
+	if (! debug_methods) return;
+
+	if (debug_methods[obj.method])
+	{
+		callback();
+	}
+}
+
+if (__DEBUG__.output)
 	console.log("Input success!");
 
 function Data()
 {
-	var __DEBUG_METHOD_GETMETAOBJ__ = false,
-		__DEBUG_METHOD_GETMETATAGWITHNAME__ = false,
-		getMetaTagWithName = function ()
+	var getMetaTagWithName = function ()
 		{
 			var meta_tags = document.getElementsByTagName('meta'),
 				meta_name = new Array();
@@ -41,8 +65,9 @@ function Data()
 				if (meta_tag.name) meta_name.push(meta_tag);
 			}
 
-			if (__IS_DEBUG__ && __DEBUG_METHOD_GETMETATAGWITHNAME__)
+			ConsoleLog({class: 'data', method: 'getMetaTagWithName'}, function () {
 				console.log('all <meta name="*" /> tags: %o', meta_name);
+			});
 
 			return meta_name;
 		};
@@ -65,8 +90,9 @@ function Data()
 			meta_obj[meta_tag.name] = meta_tag.content;
 		}
 
-		if (__IS_DEBUG__ && __DEBUG_METHOD_GETMETAOBJ__)
+		ConsoleLog({class: 'data', method: 'getMetaObj'}, function () {
 			console.log('meta object: %o', meta_obj);
+		});
 
 		return meta_obj;
 	};
@@ -78,37 +104,37 @@ function Data()
 			meta: this.meta
 		};
 	};
-
+	
 	return new data();
 }
 
 function Page()
 {
-	var __DEBUG_METHOD_SENDREQUEST__ = true,
-		__DEBUG_PAGE_CONSTRUCT__ = true;
-
 	function page()
 	{	
 		this.data = new Data();
-
-		if (__IS_DEBUG__ && __DEBUG_PAGE_CONSTRUCT__) 
+		
+		ConsoleLog({class: 'page', method: 'page'}, function () {
 			console.log('Page init new Data: %o', this.data);
+		});
 	}
 
 	page.prototype.sendRequest = function (req)
 	{
 		var request = req || {
 			greeting: "hello", 
-			info	: this.data.getInfo() 
+			// info	: this.data.getInfo() 
 		};
 
-		if (__IS_DEBUG__ && __DEBUG_METHOD_SENDREQUEST__) 
+		ConsoleLog({class: 'page', method: 'sendRequest'}, function () {
 			console.log('Send request with %o', request);
+		});
 
 		chrome.extension.sendRequest(request,
 			function (response) {
-				if (__IS_DEBUG__ && __DEBUG_METHOD_SENDREQUEST__) 
+				ConsoleLog({class: 'page', method: 'sendRequest'}, function () {
 					console.log('Receive response with %o', response);
+				});
 			}
 		);
 	};
@@ -116,5 +142,5 @@ function Page()
 	return new page();
 }
 
-var p = new Page();
-p.sendRequest();
+// var p = new Page();
+// p.sendRequest();
