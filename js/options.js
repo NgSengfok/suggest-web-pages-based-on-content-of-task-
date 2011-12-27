@@ -11,6 +11,14 @@ function Option()
 
 					if (radio_value) { console.log('click enable'); }
 					else { console.log('click disable'); }
+
+					var request = { 
+						operate: 'plugin-work',
+						enable: radio_value   
+					}
+					chrome.extension.sendRequest(request, function (response) {
+
+					});
 				});	
 			});
 		},

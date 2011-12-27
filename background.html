@@ -13,6 +13,8 @@
 	<body>
 		<script type="text/javascript">
 			document.observe('dom:loaded', function () {
+				var p = new Plugin();
+
 				chrome.extension.onRequest.addListener(
 					function (request, sender, sendResponse) 
 					{
@@ -24,6 +26,14 @@
 							sendResponse({farewell: "goodbye"});
 						else 
 							sendResponse({});
+
+						if (request.operate == 'plugin-work')
+						{
+							if (request.enable) 
+								p.enable();
+							else
+						   		p.disable();	
+						}	
 					}
 				);
 
@@ -31,9 +41,6 @@
 					console.log('create tab: %o', tab);
 				});
 
-				var p = new Plugin();
-				p.enable();
-				p.disable();
 			});
 		</script>
 	</body>
