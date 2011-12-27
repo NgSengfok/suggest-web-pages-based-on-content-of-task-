@@ -3,12 +3,34 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Options page</title>
-	<!--
+
+		<!-- prototype.js -->
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js" ></script>
-		-->
+
+		<!-- js is writed by myself --->
+		<script type="text/javascript" src="js/options.js"></script>
 	</head>
 	<body>
 		<h1>Options Page</h1>
 		<hr />
+		<div>
+			<fieldset>
+				<legend>Plugin</legend>
+				<form id="plugin-work">
+					<input type="radio" name="plugin-work-radio" value="1" class="plugin-work-radio" id="plugin-enable" />
+					<label for="plugin-enable">Enable</label>
+					<input type="radio" name="plugin-work-radio" value="0" class="plugin-work-radio" id="plugin-disable" />
+					<label for="plugin-disable">Disable</label>
+				</form>
+			</fieldset>
+		</div>
+
+		<script type="text/javascript">
+			document.observe('dom:loaded', function () {
+				console.log('Options Page start working!');
+
+				var o = new Option();
+			});	
+		</script>
 	</body>
 </html>
