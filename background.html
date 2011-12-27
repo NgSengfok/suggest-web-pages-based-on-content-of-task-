@@ -1,44 +1,40 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>background</title>
+		<title>Background Page</title>
 		<meta charset="utf-8" />
+
+		<!-- prototype.js -->
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js" ></script>
+
+		<!-- js is writed by myself -->
+		<script type="text/javascript" src="js/background.js" ></script>
 	</head>
 	<body>
 		<script type="text/javascript">
-chrome.extension.onRequest.addListener(
-	function (request, sender, sendResponse) 
-	{
-		console.log(sender.tab ? 
-					"from a content script: " + sender.tab.url :
-					"from the extension");
-		
-		if (request.greeting == "hello")
-			sendResponse({farewell: "goodbye"});
-		else 
-			sendResponse({});
-	}
-);
+			document.observe('dom:loaded', function () {
+				chrome.extension.onRequest.addListener(
+					function (request, sender, sendResponse) 
+					{
+						console.log(sender.tab ? 
+									"from a content script: " + sender.tab.url :
+									"from the extension");
+						
+						if (request.greeting == "hello")
+							sendResponse({farewell: "goodbye"});
+						else 
+							sendResponse({});
+					}
+				);
 
-chrome.tabs.onCreated.addListener(function (tab){
-	console.log('create tab: %o', tab);
-});
+				chrome.tabs.onCreated.addListener(function (tab){
+					console.log('create tab: %o', tab);
+				});
 
-chrome.tabs.onUpdated.addListener(function (tab_id, change_info, tab) {
-	
-	console.log('updated tab');
-	console.log('tab id: %o; chang info: %o; tab: %o', tab_id, change_info, tab);
-	if (change_info.status == 'complete')
-	{
-		var request = {operate: 'get-page-info'};
-
-		console.log('Send request(%o) to tab(%o)', request, tab.id);
-
-		chrome.tabs.sendRequest(tab.id, request, function (response) {
-			console.log('Receive response: %o', response);	
-		});
-	}
-});
+				var p = new Plugin();
+				p.enable();
+				p.disable();
+			});
 		</script>
 	</body>
 </html>
